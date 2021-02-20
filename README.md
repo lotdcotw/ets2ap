@@ -5,8 +5,11 @@ Lane detection ML training on Euro Truck Simulator 2 (ETS2).
 ![Lane Detection](./docs/lanedetection.jpg)
 ![ETS2 Lane Detection](./docs/ets2ld.gif)
 
+[![Autobahn Autopilot - Euro Truck Simulator 2](https://img.youtube.com/vi/Z6SmvN5DgiY/0.jpg)](https://www.youtube.com/watch?v=Z6SmvN5DgiY)  
 
-A small article is also published here: MEDIUM LINK HERE
+
+A small article is also published here: https://lotdcotw.medium.com/autobahn-autopilot-euro-truck-simulator-2-4183d2b3f948
+
 <br />
 
 ### Kudos First
@@ -142,6 +145,12 @@ python3 live.py --mode=0 --continuous=True
 
 Check the video below out; with mode=0 and continuous=True:  
 [![First steering results](https://img.youtube.com/vi/6AIwDh3W-g0/0.jpg)](https://youtu.be/6AIwDh3W-g0)  
+
+For mode=0, you can train your geometry skills by using lane vectors.
+
+
+![mode=0](./docs/cover.png)
+
 
 After mode 2 is ready, the update will take its place here also.  
 

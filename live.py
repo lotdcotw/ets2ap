@@ -15,7 +15,6 @@ from torch.utils.data import Dataset
 import config
 from config import args_setting
 from houghlinesp import hough_lines_p
-from keys import right, left, straight
 from matrix import matrix
 from model import generate_model
 from utils import signal_handler, countdown

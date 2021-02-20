@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 
 import config
+from keys import right, left, straight
 
 
 CLEAN_THRESHOLD = 3.5
@@ -125,10 +126,10 @@ def hough_lines_p(file_path: str):
 
         if direction > 2:
             print(f"{config.CC_BOLD}<<<{config.CC_ENDC}")
-            # left()
+            left()
         elif direction < 0.5:
             print(f"{config.CC_BOLD}>>>{config.CC_ENDC}")
-            # right()
+            right()
         else:
             print(f"{config.CC_BOLD}^^^{config.CC_ENDC}")
-            # straight()
+            straight()
