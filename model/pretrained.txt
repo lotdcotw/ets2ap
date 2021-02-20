@@ -1,0 +1,9 @@
+Please remember!
+This model is from real life.
+ETS2 pretrained model is not yet added into the repository.
+
+Single pretrained model: https://drive.google.com/drive/folders/1BHbYU3AoU5i2mduMtfUkFHVuYObA_fWt?usp=sharing  
+Download the model and copy unetlstm.pth inside this folder.  
+Do not forget to validate the pretrained model path (PRETRAINED_PATH) in config.py  
+
+All pretrained models: https://pan.baidu.com/s/1u9ABAPouZL2nIMT4E7uAQw (Pass：w30b)
