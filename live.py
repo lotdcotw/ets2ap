@@ -17,18 +17,17 @@ from config import args_setting
 from houghlinesp import hough_lines_p
 from matrix import matrix
 from model import generate_model
-from utils import signal_handler, countdown
+from utils import countdown, fna, fne, signal_handler
 
 
-SAVE = "./data/live/live.jpg"
-TEXT = "./data/live/matrix.txt"
-PRED = "./data/live/pred.jpg"
+PATH = "./data/live/"
+FILE = "live.jpg"
 
 
 class SingleDataset(Dataset):
-    def __init__(self, transforms):
+    def __init__(self, filename, transforms):
         self.img_list = []
-        item = SAVE.strip().split()
+        item = filename.strip().split()
         self.img_list.append(item)
         self.dataset_size = len(self.img_list)
         self.transforms = transforms
@@ -84,11 +83,12 @@ def live(mode=0, continuous=False):
 
     while True:
         img = grab()
-        cv2.imwrite(SAVE, img)
+        frame = fne(PATH + FILE)
+        cv2.imwrite(frame, img)
 
         # load data for batches, num_workers for multiprocess
         test_loader = torch.utils.data.DataLoader(
-            SingleDataset(transforms=op_tranforms),
+            SingleDataset(frame, transforms=op_tranforms),
             batch_size=args.test_batch_size,
             shuffle=False,
             num_workers=1,
@@ -107,7 +107,9 @@ def live(mode=0, continuous=False):
 
                 # save first matrix in the tensor to a text file
                 if len(pred) > 0 and len(pred[0]) > 0:
-                    np.savetxt(TEXT, pred[0][0].cpu().numpy(), fmt="%d")
+                    np.savetxt(
+                        fna(frame, "matrix", "txt"), pred[0][0].cpu().numpy(), fmt="%d"
+                    )
 
                 # save predicted image
                 img = (
@@ -115,10 +117,11 @@ def live(mode=0, continuous=False):
                     * 255
                 )
                 img = Image.fromarray(img.astype(np.uint8))
-                img.save(PRED)
+                predicted = fna(frame, "pred")
+                img.save(predicted)
 
                 if mode == 0:
-                    hough_lines_p(PRED)
+                    hough_lines_p(predicted, frame)
                 elif mode == 1:
                     matrix()
                 else:

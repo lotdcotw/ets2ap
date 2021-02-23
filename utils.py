@@ -1,3 +1,5 @@
+from datetime import datetime
+import os
 import re
 import sys
 import time
@@ -48,3 +50,24 @@ def signal_handler(sig, frame):
     """ Runs when exit signal is received """
     release_all()
     sys.exit(0)
+
+
+def ts():
+    """ Returns the current timestamp """
+    now = datetime.now()
+    return datetime.timestamp(now)
+
+
+def fne(base_file_name, id=0):
+    """ Returns a file name extension with timestamp and id/counter """
+    stamp = ts()
+    fn, ext = os.path.splitext(base_file_name)
+    return fn + "_" + str(stamp) + "_" + str(id) + ext
+
+
+def fna(file_name, addition, newExt=""):
+    """ Adds string at the end of a filename """
+    fn, ext = os.path.splitext(file_name)
+    if newExt == "":
+        return fn + "_" + addition + ext
+    return fn + "_" + addition + "." + newExt

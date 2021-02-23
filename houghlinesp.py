@@ -11,13 +11,13 @@ import numpy as np
 
 import config
 from keys import right, left, straight
+from utils import fna
 
 
 CLEAN_THRESHOLD = 3.5
-HLP = "./data/live/hlp.jpg"
 
 
-def hough_lines_p(file_path: str):
+def hough_lines_p(file_path: str, file_name: str):
     """ Reads the predicted lane image, applies HoughLinesP, and tries to steer """
     # read the predicted image
     img = cv2.imread(file_path)
@@ -99,7 +99,7 @@ def hough_lines_p(file_path: str):
     cv2.line(
         img, (right_line[0], right_line[1]), (right_line[2], right_line[3]), 255, 2
     )
-    cv2.imwrite(HLP, img)
+    cv2.imwrite(fna(file_name, "hlp"), img)
 
     # middle points
     lxm = (left_line[0] + left_line[2]) / 2

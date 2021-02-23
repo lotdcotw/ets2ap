@@ -5,7 +5,7 @@ Forked: https://github.com/qinnzou/Robust-Lane-Detection
 import argparse
 
 # Global parameters
-DEFAULT_COUNTDOWN = 1
+DEFAULT_COUNTDOWN = 3
 
 # Dataset setting
 IMG_WIDTH = 200
