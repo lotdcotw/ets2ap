@@ -146,5 +146,17 @@ def args_setting():
         default=False,
         help="Writes original and prediction images",
     )
+    parser.add_argument(
+        "--wff",
+        type=float,
+        default=1.0,
+        help="Wait for frame in seconds (float)",
+    )
     args = parser.parse_args()
+
+    # overwrite parameters
+    if args.wff is not None:
+        global WAIT_FOR_NEXT_FRAME
+        WAIT_FOR_NEXT_FRAME = args.wff
+
     return args
