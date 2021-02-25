@@ -56,20 +56,23 @@ def vector2line(lines, img=None, file_name: str = ""):
     lym = (left_line[1] + left_line[2]) / 2
     rym = (right_line[1] + right_line[2]) / 2
 
-    if lxm >= 100 and rxm >= 100 or lxm <= 100 and rxm <= 100:
+    middle_point = config.IMG_WIDTH / 2
+    if (
+        lxm >= middle_point
+        and rxm >= middle_point
+        or lxm <= middle_point
+        and rxm <= middle_point
+    ):
         print(
             f"{config.CC_WARNING}Confused{config.CC_ENDC} while selectiong left/right lanes"
         )
         return (0, 2)
-    elif lym / rym > 1.5 or lym / rym < 0.5:
-        print(f"{config.CC_WARNING}Confused{config.CC_ENDC} because of close lanes")
-        return (0, 3)
 
     midpoints = [
         [lxm, (left_line[1] + left_line[3]) / 2],
         [rxm, (right_line[1] + right_line[3]) / 2],
     ]
-    center = [100, 60]  # bottom center of the image (original 200x60)
+    center = [middle_point, config.IMG_HEIGHT]
     diff_x = [abs(center[0] - midpoints[0][0]), abs(center[0] - midpoints[1][0])]
     direction = diff_x[0] / diff_x[1]
     print(f"{config.CC_OKBLUE}Diff X:{config.CC_ENDC} %s" % direction)

@@ -20,23 +20,19 @@ def grab():
 
     # resize to expected model size
     # depending on your model, or training data, adjust it in config.py
-    ratio = config.MODEL_IMG_WIDTH / (
-        config.SCREENSHOT_BOX[2] - config.SCREENSHOT_BOX[0]
-    )
+    ratio = config.IMG_WIDTH / (config.SCREENSHOT_BOX[2] - config.SCREENSHOT_BOX[0])
     dsize = (
-        config.MODEL_IMG_WIDTH,
+        config.IMG_WIDTH,
         int((config.SCREENSHOT_BOX[3] - config.SCREENSHOT_BOX[1]) * ratio),
     )
     img = cv2.resize(img, dsize=dsize)
     # crop to model size
-    height_diff = dsize[1] - config.MODEL_IMG_HEIGHT
+    height_diff = dsize[1] - config.IMG_HEIGHT
     if height_diff < 0:
         print(
             f"{config.CC_ERROR}Error: Invalid screen size configuraion{config.CC_ENDC}"
         )
         return None
-    img = img[
-        height_diff : height_diff + config.MODEL_IMG_HEIGHT, 0 : config.MODEL_IMG_WIDTH
-    ]
+    img = img[height_diff : height_diff + config.IMG_HEIGHT, 0 : config.IMG_WIDTH]
 
     return img

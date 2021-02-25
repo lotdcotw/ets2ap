@@ -13,7 +13,7 @@ import config
 from utils import fna
 
 
-THRESHOLD = 100
+THRESHOLD = 50
 
 
 def find_vectors_in_matrix_file(
@@ -21,6 +21,7 @@ def find_vectors_in_matrix_file(
 ):
     """ Finds and returns vectors in a matrix file """
     data = []
+
     with open(matrix_file, "r") as f:
         data = [[int(num) for num in line.split(" ")] for line in f]
 
@@ -47,7 +48,10 @@ def find_vectors_in_matrix_data(data, graph: bool = False, file_name: str = ""):
 def find_vectors_in_matrix(data, graph: bool = False, file_name: str = ""):
     """ Finds and returns vectors in a 2D matrix """
 
-    labeled_array, num_features = label(data)  # group and label
+    labeled_array, num_features = label(
+        data, structure=[[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+    )  # group and label
+    print(f"Group count: {config.CC_OKCYAN}%d{config.CC_ENDC}" % num_features)
 
     if graph:
         np.savetxt(fna(file_name, "matrix_labeled", "txt"), labeled_array, fmt="%d")
@@ -63,12 +67,14 @@ def find_vectors_in_matrix(data, graph: bool = False, file_name: str = ""):
         points = np.unravel_index(dist_mat.argmax(), dist_mat.shape)  # furthest cands
         vectors.append(
             [
-                candidates[points[0]][0],
                 candidates[points[0]][1],
-                candidates[points[1]][0],
+                candidates[points[0]][0],
                 candidates[points[1]][1],
+                candidates[points[1]][0],
             ]
         )
+
+    print(f"Vector count: {config.CC_OKCYAN}%d{config.CC_ENDC}" % len(vectors))
 
     return np.array(vectors)
 
@@ -92,4 +98,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    find_vectors_in_matrix_file(args.file, args.cols, args.rows)
+    lines = find_vectors_in_matrix_file(args.file, args.cols, args.rows)
+    print(lines)

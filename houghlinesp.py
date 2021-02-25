@@ -23,10 +23,6 @@ def hough_lines_p(file_path: str, file_name: str):
     # read the predicted image
     img = cv2.imread(file_path)
     img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    # model result is 256x128, it is still possible to reduce the size to 200x60
-    img = cv2.resize(img, (200, 100))
-    img = np.array(img)
-    img = img[40 : 40 + 60, 0:200]
 
     rho = 1  # distance resolution in pixels of the Hough grid
     theta = np.pi / 180  # angular resolution in radians of the Hough grid
