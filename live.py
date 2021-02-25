@@ -1,6 +1,4 @@
-from math import pow, sqrt, atan2, degrees
 import signal
-import sys
 import time
 
 import cv2
@@ -10,7 +8,6 @@ import torch
 from torchvision import transforms
 from grab import grab
 from torch.utils.data import Dataset
-
 
 import config
 from config import args_setting
