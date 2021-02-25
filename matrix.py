@@ -6,7 +6,6 @@ import cv2
 
 from matrix2vector import find_vectors_in_matrix_data
 from steering import steer
-from utils import fna
 from vector2line import vector2line
 
 
@@ -18,7 +17,7 @@ def matrix(data, graph: bool = False, file_path: str = "", file_name: str = ""):
     if graph:
         img = cv2.imread(file_path)
         img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-        direction, error = vector2line(lines, img, fna(file_name, "hlp"))
+        direction, error = vector2line(lines, img, file_name)
     else:
         direction, error = vector2line(lines)
 

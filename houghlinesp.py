@@ -11,7 +11,6 @@ import numpy as np
 
 import config
 from steering import steer
-from utils import fna
 from vector2line import vector2line
 
 
@@ -63,6 +62,6 @@ def hough_lines_p(file_path: str, file_name: str):
             cleans = np.append(cleans, [line[0]], axis=0)
 
     lines = cleans
-    direction, error = vector2line(lines, img, fna(file_name, "hlp"))
+    direction, error = vector2line(lines, img, file_name)
     if error == 0:
         steer(direction)
