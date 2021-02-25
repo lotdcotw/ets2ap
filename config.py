@@ -142,5 +142,11 @@ def args_setting():
         default=False,
         help="Single shot or continuous capturing",
     )
+    parser.add_argument(
+        "--out",
+        type=bool,
+        default=False,
+        help="Writes original and prediction images",
+    )
     args = parser.parse_args()
     return args

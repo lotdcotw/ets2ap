@@ -75,6 +75,9 @@ def live():
     )
     print(f"Continuous: {config.CC_BOLD}%r{config.CC_ENDC}" % args.continuous)
 
+    if args.mode == 0:  # force output due to mode
+        args.out = True
+
     countdown()
 
     while True:
@@ -102,24 +105,26 @@ def live():
                 pred = output.max(1, keepdim=True)[1]
 
                 # save first matrix in the tensor to a text file
-                if len(pred) > 0 and len(pred[0]) > 0:
+                if len(pred) > 0 and len(pred[0]) > 0 and args.out:
                     np.savetxt(
                         fna(frame, "matrix", "txt"), pred[0][0].cpu().numpy(), fmt="%d"
                     )
 
                 # save predicted image
-                img = (
-                    torch.squeeze(pred).cpu().unsqueeze(2).expand(-1, -1, 3).numpy()
-                    * 255
-                )
-                img = Image.fromarray(img.astype(np.uint8))
-                predicted = fna(frame, "pred")
-                img.save(predicted)
+                if args.out:
+                    img = (
+                        torch.squeeze(pred).cpu().unsqueeze(2).expand(-1, -1, 3).numpy()
+                        * 255
+                    )
+                    img = Image.fromarray(img.astype(np.uint8))
+                    predicted = fna(frame, "pred")
+                    img.save(predicted)
 
+                # mode
                 if args.mode == 0:
                     hough_lines_p(predicted, frame)
                 elif args.mode == 1:
-                    matrix(pred[0][0].cpu().numpy())
+                    matrix(pred[0][0].cpu().numpy(), args.out, predicted, frame)
                 else:
                     # TODO # add other methods to predict steering time, sensitivity and direction
                     pass

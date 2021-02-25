@@ -40,7 +40,7 @@ def vector2line(lines, img=None, file_name: str = ""):
     print(f"{config.CC_OKBLUE}Right Line: {config.CC_ENDC}", end="")
     print(right_line)
 
-    # DEBUG: draw lines on the image
+    # draw lines on the image
     if img is not None and file_name != "":
         cv2.line(
             img, (left_line[0], left_line[1]), (left_line[2], left_line[3]), 255, 2

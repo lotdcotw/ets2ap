@@ -10,15 +10,18 @@ from scipy import spatial
 from scipy.ndimage.measurements import label
 
 import config
+from utils import fna
 
 
 THRESHOLD = 100
 
 
-def find_vectors_in_matrix_file(file_name: str, cols: int, rows: int):
+def find_vectors_in_matrix_file(
+    matrix_file: str, cols: int, rows: int, graph: bool = False, file_name: str = ""
+):
     """ Finds and returns vectors in a matrix file """
     data = []
-    with open(file_name, "r") as f:
+    with open(matrix_file, "r") as f:
         data = [[int(num) for num in line.split(" ")] for line in f]
 
     if len(data) == 0:
@@ -30,20 +33,25 @@ def find_vectors_in_matrix_file(file_name: str, cols: int, rows: int):
     elif len(data[0]) != cols:
         print(f"{config.CC_ERROR}Invalid X size{config.CC_ENDC}")
         return []
-    return find_vectors_in_matrix(data)
+    return find_vectors_in_matrix(data, graph, file_name)
 
 
-def find_vectors_in_matrix_data(data):
+def find_vectors_in_matrix_data(data, graph: bool = False, file_name: str = ""):
     """
     Finds and returns vectors in a 2D matrix.
     This is usually the first element of a tensor e.g. tensor[0][0]
     """
-    return find_vectors_in_matrix(data)
+    return find_vectors_in_matrix(data, graph, file_name)
 
 
-def find_vectors_in_matrix(data):
+def find_vectors_in_matrix(data, graph: bool = False, file_name: str = ""):
     """ Finds and returns vectors in a 2D matrix """
+
     labeled_array, num_features = label(data)  # group and label
+
+    if graph:
+        np.savetxt(fna(file_name, "matrix_labeled", "txt"), labeled_array, fmt="%d")
+
     vectors = []
     for i in range(num_features):
         index = i + 1
