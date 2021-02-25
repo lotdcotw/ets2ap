@@ -1,11 +1,15 @@
 """
 Finds and process the lines in a matrix tensor[0][0]
-
-WORK IN PROGRESS
-Feel free to contribute
 """
 
+from matrix2vector import find_vectors_in_matrix_data
+from steering import steer
+from vector2line import vector2line
 
-def matrix():
+
+def matrix(data):
     """ Tries to find lines in a matrix, and predict steering direction and sensitivity """
-    return
+    lines = find_vectors_in_matrix_data(data)
+    direction, error = vector2line(lines)
+    if error == 0:
+        steer(direction)

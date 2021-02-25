@@ -45,16 +45,12 @@ class SingleDataset(Dataset):
         return sample
 
 
-def live(mode=0, continuous=False):
+def live():
     """ Continuously redicts lanes in the game screen on gameplay """
     args = args_setting()
     torch.manual_seed(args.seed)
     use_cuda = args.cuda and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
-
-    # argument overwrite
-    mode = args.mode
-    continuous = args.continuous
 
     # turn image into floatTensor
     op_tranforms = transforms.Compose([transforms.ToTensor()])
@@ -73,8 +69,11 @@ def live(mode=0, continuous=False):
 
     signal.signal(signal.SIGINT, signal_handler)  # exit signal check
 
-    print(f"Mode: {config.CC_BOLD}%d{config.CC_ENDC}" % mode)
-    print(f"Continuous: {config.CC_BOLD}%r{config.CC_ENDC}" % continuous)
+    print(
+        f"Mode: {config.CC_BOLD}{config.CC_OKBLUE}%d{config.CC_ENDC}{config.CC_ENDC}"
+        % args.mode
+    )
+    print(f"Continuous: {config.CC_BOLD}%r{config.CC_ENDC}" % args.continuous)
 
     countdown()
 
@@ -117,15 +116,15 @@ def live(mode=0, continuous=False):
                 predicted = fna(frame, "pred")
                 img.save(predicted)
 
-                if mode == 0:
+                if args.mode == 0:
                     hough_lines_p(predicted, frame)
-                elif mode == 1:
-                    matrix()
+                elif args.mode == 1:
+                    matrix(pred[0][0].cpu().numpy())
                 else:
                     # TODO # add other methods to predict steering time, sensitivity and direction
                     pass
 
-        if not continuous:
+        if not args.continuous:
             break
 
         time.sleep(config.WAIT_FOR_NEXT_FRAME)

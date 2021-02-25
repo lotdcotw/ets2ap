@@ -15,7 +15,7 @@ import config
 THRESHOLD = 100
 
 
-def find_vectors_in_matrix(file_name: str, cols: int, rows: int):
+def find_vectors_in_matrix_file(file_name: str, cols: int, rows: int):
     """ Finds and returns vectors in a matrix file """
     data = []
     with open(file_name, "r") as f:
@@ -30,7 +30,19 @@ def find_vectors_in_matrix(file_name: str, cols: int, rows: int):
     elif len(data[0]) != cols:
         print(f"{config.CC_ERROR}Invalid X size{config.CC_ENDC}")
         return []
+    return find_vectors_in_matrix(data)
 
+
+def find_vectors_in_matrix_data(data):
+    """
+    Finds and returns vectors in a 2D matrix.
+    This is usually the first element of a tensor e.g. tensor[0][0]
+    """
+    return find_vectors_in_matrix(data)
+
+
+def find_vectors_in_matrix(data):
+    """ Finds and returns vectors in a 2D matrix """
     labeled_array, num_features = label(data)  # group and label
     vectors = []
     for i in range(num_features):
@@ -41,9 +53,16 @@ def find_vectors_in_matrix(file_name: str, cols: int, rows: int):
         candidates = indices[spatial.ConvexHull(indices).vertices]  # convex hull
         dist_mat = spatial.distance_matrix(candidates, candidates)  # distance btw
         points = np.unravel_index(dist_mat.argmax(), dist_mat.shape)  # furthest cands
-        vectors.append([candidates[points[0]], candidates[points[1]]])
+        vectors.append(
+            [
+                candidates[points[0]][0],
+                candidates[points[0]][1],
+                candidates[points[1]][0],
+                candidates[points[1]][1],
+            ]
+        )
 
-    return vectors
+    return np.array(vectors)
 
 
 if __name__ == "__main__":
@@ -65,4 +84,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    find_vectors_in_matrix(args.file, args.cols, args.rows)
+    find_vectors_in_matrix_file(args.file, args.cols, args.rows)

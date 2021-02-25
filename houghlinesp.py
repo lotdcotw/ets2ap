@@ -1,6 +1,6 @@
 """
 Applies HoughLinesP to find lines in a prediction image.
-NOT for the solution, just experimenting
+NOT RECOMMENDED, just experimenting.
 Check other methods in live.py with 'mode' parameter.
 """
 
@@ -10,8 +10,9 @@ import cv2
 import numpy as np
 
 import config
-from keys import right, left, straight
+from steering import steer
 from utils import fna
+from vector2line import vector2line
 
 
 CLEAN_THRESHOLD = 3.5
@@ -66,70 +67,6 @@ def hough_lines_p(file_path: str, file_name: str):
             cleans = np.append(cleans, [line[0]], axis=0)
 
     lines = cleans
-    count = len(lines)
-
-    print(f"{config.CC_HEADER}LINES{config.CC_ENDC}")
-    print(lines)
-
-    left_line = [0, 0, 0, 0]
-    right_line = [0, 0, 0, 0]
-
-    if count < 2:
-        print(f"{config.CC_WARNING}Failed to detect at least two lines{config.CC_ENDC}")
-        return
-
-    # if more than 2 lines, selecting ones close to the camera center
-    lines = sorted(lines, key=lambda x: abs(100 - (x[0] + x[2]) / 2))
-    lines = [lines[0], lines[1]]
-
-    if lines[0][0] < lines[1][0] and lines[0][2] < lines[1][2]:
-        left_line = lines[0]
-        right_line = lines[1]
-    else:
-        left_line = lines[1]
-        right_line = lines[0]
-
-    print(f"{config.CC_OKBLUE}Left Line: {config.CC_ENDC}", end="")
-    print(left_line)
-    print(f"{config.CC_OKBLUE}Right Line: {config.CC_ENDC}", end="")
-    print(right_line)
-
-    # DEBUG: draw lines on the image
-    cv2.line(img, (left_line[0], left_line[1]), (left_line[2], left_line[3]), 255, 2)
-    cv2.line(
-        img, (right_line[0], right_line[1]), (right_line[2], right_line[3]), 255, 2
-    )
-    cv2.imwrite(fna(file_name, "hlp"), img)
-
-    # middle points
-    lxm = (left_line[0] + left_line[2]) / 2
-    rxm = (right_line[0] + right_line[2]) / 2
-    lym = (left_line[1] + left_line[2]) / 2
-    rym = (right_line[1] + right_line[2]) / 2
-
-    if lxm >= 100 and rxm >= 100 or lxm <= 100 and rxm <= 100:
-        print(
-            f"{config.CC_WARNING}Confused{config.CC_ENDC} while selectiong left/right lanes"
-        )
-    elif lym / rym > 1.5 or lym / rym < 0.5:
-        print(f"{config.CC_WARNING}Confused{config.CC_ENDC} because of close lanes")
-    else:
-        midpoints = [
-            [lxm, (left_line[1] + left_line[3]) / 2],
-            [rxm, (right_line[1] + right_line[3]) / 2],
-        ]
-        center = [100, 60]  # bottom center of the image (original 200x60)
-        diff_x = [abs(center[0] - midpoints[0][0]), abs(center[0] - midpoints[1][0])]
-        direction = diff_x[0] / diff_x[1]
-        print(f"{config.CC_OKBLUE}Diff X:{config.CC_ENDC} %s" % direction)
-        print(f"{config.CC_OKCYAN}Steering:{config.CC_ENDC}", end="")
-
-        if direction > 2:
-            print(f"{config.CC_BOLD}<<<{config.CC_ENDC}")
-            left()
-        elif direction < 0.5:
-            print(f"{config.CC_BOLD}>>>{config.CC_ENDC}")
-            right()
-        else:
-            print(f"{config.CC_BOLD}^^^{config.CC_ENDC}")
-            straight()
+    direction, error = vector2line(lines, img, fna(file_name, "hlp"))
+    if error == 0:
+        steer(direction)
