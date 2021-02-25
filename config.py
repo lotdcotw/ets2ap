@@ -6,6 +6,7 @@ import argparse
 
 # Global parameters
 DEFAULT_COUNTDOWN = 3
+KEY_EVENTS = True
 
 # Dataset setting
 IMG_WIDTH = 256
@@ -152,11 +153,20 @@ def args_setting():
         default=1.0,
         help="Wait for frame in seconds (float)",
     )
+    parser.add_argument(
+        "--nokeys",
+        type=bool,
+        default=False,
+        help="Do not send key events",
+    )
     args = parser.parse_args()
 
     # overwrite parameters
     if args.wff is not None:
         global WAIT_FOR_NEXT_FRAME
         WAIT_FOR_NEXT_FRAME = args.wff
+    if args.nokeys:
+        global KEY_EVENTS
+        KEY_EVENTS = False
 
     return args

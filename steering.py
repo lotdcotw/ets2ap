@@ -10,6 +10,9 @@ from keys import left, right, straight
 
 
 def steer(direction: float = 0):
+    if not config.KEY_EVENTS:
+        return
+
     """ Steers to the given direction with thresholds """
     print(f"{config.CC_OKCYAN}Steering:{config.CC_ENDC}", end="")
     if direction > 2:
