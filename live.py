@@ -51,6 +51,9 @@ def live():
     torch.manual_seed(args.seed)
     use_cuda = args.cuda and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
+    map_location = "cpu"
+    if torch.cuda.is_available():
+        map_location=lambda storage, loc: storage.cuda()
 
     # turn image into floatTensor
     op_tranforms = transforms.Compose([transforms.ToTensor()])
@@ -60,7 +63,7 @@ def live():
     model = generate_model(args)
     # class_weight = torch.Tensor(config.CLASS_WEIGHT)
     # criterion = torch.nn.CrossEntropyLoss(weight=class_weight).to(device)
-    pretrained_dict = torch.load(config.PRETRAINED_PATH)
+    pretrained_dict = torch.load(config.PRETRAINED_PATH, map_location=map_location) #.to(device)
     model_dict = model.state_dict()
     pretrained_dict_1 = {k: v for k, v in pretrained_dict.items() if (k in model_dict)}
     model_dict.update(pretrained_dict_1)
@@ -122,9 +125,9 @@ def live():
 
                 # mode
                 if args.mode == 0:
-                    hough_lines_p(predicted, frame)
+                    hough_lines_p(pred, frame)
                 elif args.mode == 1:
-                    matrix(pred[0][0].cpu().numpy(), args.out, predicted, frame)
+                    matrix(pred[0][0].cpu().numpy(), args.out, pred, frame)
                 else:
                     # TODO # add other methods to predict steering time, sensitivity and direction
                     pass

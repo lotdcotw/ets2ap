@@ -1,14 +1,23 @@
 import pyautogui
+from sys import platform
 
 
 def pressKey(k):
     """ Press the given key """
-    pyautogui.keyDown(k)
+    if platform == "linux" or platform == "linux2":
+        pyautogui.keyDown(k)
+    elif platform == "win32":
+        import pydirectinput
+        pydirectinput.keyDown(k)
 
 
 def releaseKey(k):
     """ Release the given key """
-    pyautogui.keyUp(k)
+    if platform == "linux" or platform == "linux2":
+        pyautogui.keyUp(k)
+    elif platform == "win32":
+        import pydirectinput
+        pydirectinput.keyUp(k)
 
 
 def straight():

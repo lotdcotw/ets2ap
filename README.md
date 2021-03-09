@@ -57,17 +57,15 @@ https://github.com/qinnzou/Robust-Lane-Detection
 ## 2. Requirements
 1. Python >= 3.6 and PIP3  
 2. CUDA >= 8
-3. Euro Truck Simulator 2  
+3. Torch with CUDA support  
+https://pytorch.org/
+4. Euro Truck Simulator 2  
 This is optional. You can try this with other games.
 
 Run the following command to install all required libraries:  
 ```
 pip3 install -r requirements.txt
 ```
-
-This project is currently only supported on Linux/Ubuntu.    
-If you are going to work on Windows environments, it is required to make some changes to grab screen and send button commands.  
-Feel free to contribute for Windows support.
 
 ---
 
