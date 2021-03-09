@@ -132,13 +132,13 @@ def args_setting():
     parser.add_argument(
         "--mode",
         type=int,
-        default=0,
+        default=1,
         help="(0: HoughLinesP, 1: Matrix)",
     )
     parser.add_argument(
         "--continuous",
         type=bool,
-        default=False,
+        default=True,
         help="Single shot or continuous capturing",
     )
     parser.add_argument(
